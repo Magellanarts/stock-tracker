@@ -44,9 +44,6 @@ export default {
       results: ''
     }
   },
-  mounted() {
-    console.log(this.$auth)
-  },
   middleware: 'notAuthenticated',
   methods: {
     loginSubmit() {

@@ -3,7 +3,12 @@
     <div class="container mx-auto text-center my-10">
       <h1 class="text-5xl text-pink-900">Welcome</h1>
     </div>
-    <symbol-form />
+    <div class="mx-auto text-center">
+      <p class="my-6">
+        Search for a single symbol or separate multiple with a comma
+      </p>
+      <symbol-form />
+    </div>
 
     <div v-if="!token" class="container mx-auto text-center my-6">
       <h2 class="text-2xl text-pink-900 my-6">
