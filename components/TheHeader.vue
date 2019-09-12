@@ -1,10 +1,16 @@
 <template>
   <header>
     <nav>
-      <nuxt-link to="/">Home</nuxt-link>
-      <nuxt-link v-if="!token" to="sign-up">Sign Up</nuxt-link>
-      <nuxt-link v-if="!token" to="login">Log In</nuxt-link>
-      <nuxt-link v-if="token" to="/dashboard">Dashboard</nuxt-link>
+      <nuxt-link class="text-blue-700" to="/">Home</nuxt-link>
+      <nuxt-link v-if="!token" class="text-blue-700" to="sign-up"
+        >Sign Up</nuxt-link
+      >
+      <nuxt-link v-if="!token" class="text-blue-700" to="login"
+        >Log In</nuxt-link
+      >
+      <nuxt-link v-if="token" class="text-blue-700" to="/dashboard"
+        >Dashboard</nuxt-link
+      >
     </nav>
   </header>
 </template>
@@ -31,7 +37,6 @@ nav {
   padding: 0 5%;
 
   a {
-    color: #597024;
     font-size: 18px;
     line-height: 50px;
     font-weight: 700;

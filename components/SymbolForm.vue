@@ -8,14 +8,14 @@
         <input
           v-model="searchField"
           name="symbol_search"
-          class="w-64 border-pink-900 border-solid border rounded-sm p-1 hover:border-pink-700 focus:border-pink-700 outline-none h-8"
+          class="w-64 border-blue-900 border-solid border rounded-sm p-1 hover:border-blue-700 focus:border-blue-700 outline-none h-8"
           type="text"
           placeholder="Search by symbol"
         />
         <button
           type="submit"
           :disabled="!searchField"
-          class="rounded-sm p-1 px-4 bg-pink-900 text-white h-8 hover:bg-pink-700 font-bold"
+          class="rounded-sm p-1 px-4 bg-blue-600 text-white h-8 hover:bg-blue-500 font-bold"
         >
           Submit
         </button>
@@ -38,7 +38,13 @@
         <button
           type="button"
           class="rounded-sm p-2 px-6 bg-green-400 text-white font-bold hover:bg-green-300"
-          @click="addStock(result['1. symbol'])"
+          @click="
+            updateSymbols({
+              symbol: result['1. symbol'],
+              action: 'add',
+              price: Number(result['2. price']).toFixed(2)
+            })
+          "
         >
           Add
         </button>
@@ -59,13 +65,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['addSymbol']),
+    ...mapActions(['updateSymbols']),
     async searchSymbols() {
       // cmg,aapl,mack,ua,sbux,amzn,fb,vti,cgc,bynd,dis
       this.searchResults = await getQuotes(this.searchField)
-    },
-    addStock(symbol) {
-      this.addSymbol(symbol)
     }
   }
 }
@@ -77,7 +80,7 @@ button[disabled='disabled'] {
   cursor: default;
 
   &:hover {
-    background: #702459;
+    background: #bee3f8;
   }
 }
 </style>
