@@ -40,36 +40,38 @@
       </div>
     </div>
     <transition name="fadeHeight" mode="out-in">
-      <div v-if="showDetails" class="py-2">
+      <div v-if="showDetails" class="py-4 leading-tight">
         <div class="flex flex-wrap">
           <div class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4">
-            <div class="text-xl">{{ stock.shares }}</div>
-            <div class="text-sm">Shares</div>
+            <div class="text-xl font-bold">{{ stock.shares }}</div>
+            <div class="text-sm text-gray-800">Shares</div>
           </div>
           <div class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4">
-            <div class="text-xl">{{ percentOfPortfolio }}%</div>
-            <div class="text-xs">Percentage of Portfolio</div>
+            <div class="text-xl font-bold">{{ percentOfPortfolio }}%</div>
+            <div class="text-xs text-gray-800">Percentage of Portfolio</div>
           </div>
           <div class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4">
-            <div class="text-xl">{{ numberFormat(stock.price) }}</div>
-            <div class="text-sm">Current Price</div>
+            <div class="text-xl font-bold">
+              ${{ numberFormat(stock.price) }}
+            </div>
+            <div class="text-sm text-gray-800">Current Price</div>
           </div>
           <div class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4">
-            <div class="text-xl">${{ stock.pricePaid }}</div>
-            <div class="text-xs">Original Price Paid</div>
+            <div class="text-xl font-bold">${{ stock.pricePaid }}</div>
+            <div class="text-xs text-gray-800">Original Price Paid</div>
           </div>
 
           <div
             v-if="stock.datePurchased"
             class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4"
           >
-            <div class="text-xl">{{ stock.datePurchased }}</div>
-            <div class="text-sm">Date Puchased</div>
+            <div class="text-xl font-bold">{{ stock.datePurchased }}</div>
+            <div class="text-sm text-gray-800">Date Puchased</div>
           </div>
 
           <div class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4">
-            <div class="text-xl">${{ numberFormat(totalValue) }}</div>
-            <div class="text-sm">Total value</div>
+            <div class="text-xl font-bold">${{ numberFormat(totalValue) }}</div>
+            <div class="text-sm text-gray-800">Total value</div>
           </div>
           <div class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4">
             <div
@@ -78,7 +80,7 @@
             >
               ${{ numberFormat(stock.price - stock.pricePaid) }}
             </div>
-            <div class="text-sm">Price change</div>
+            <div class="text-sm text-gray-800">Price change</div>
           </div>
           <div class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4">
             <div
@@ -87,7 +89,7 @@
             >
               {{ percentageChange }}%
             </div>
-            <div class="text-sm">Percentage change</div>
+            <div class="text-sm text-gray-800">Percentage change</div>
           </div>
         </div>
       </div>
@@ -112,7 +114,7 @@ export default {
   },
   data() {
     return {
-      showDetails: false
+      showDetails: true
     }
   },
   computed: {
