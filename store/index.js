@@ -1,4 +1,4 @@
-import Vue from 'Vue'
+import Vue from 'vue'
 import { saveStocks, getQuotes } from '@/actions/symbols'
 const Cookie = process.client ? require('js-cookie') : undefined
 const cookieparser = process.server ? require('cookieparser') : undefined
