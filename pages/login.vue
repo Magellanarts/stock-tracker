@@ -66,6 +66,7 @@ export default {
           }
         })
         .catch((e) => {
+          this.results = e.data
           console.log(e.response.data[0].message)
         })
     }
