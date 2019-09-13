@@ -41,46 +41,53 @@
     </div>
     <transition name="fadeHeight" mode="out-in">
       <div v-if="showDetails" class="py-2">
-        <div>
-          <div>
-            <span>Shares:</span>
-            <span>{{ stock.shares }}</span>
+        <div class="flex flex-wrap">
+          <div class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4">
+            <div class="text-xl">{{ stock.shares }}</div>
+            <div class="text-sm">Shares</div>
           </div>
-          <div>
-            <span>Percentage of Portfolio:</span>
-            <span>{{ percentOfPortfolio }}%</span>
+          <div class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4">
+            <div class="text-xl">{{ percentOfPortfolio }}%</div>
+            <div class="text-xs">Percentage of Portfolio</div>
           </div>
-          <div>
-            <span>Current Price:</span>
-            <span>{{ numberFormat(stock.price) }}</span>
+          <div class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4">
+            <div class="text-xl">{{ numberFormat(stock.price) }}</div>
+            <div class="text-sm">Current Price</div>
           </div>
-          <div>
-            <span>Original Price Paid:</span>
-            <span>${{ stock.pricePaid }}</span>
-          </div>
-
-          <div v-if="stock.datePurchased">
-            <span>Date Puchased:</span>
-            <span>{{ stock.datePurchased }}</span>
+          <div class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4">
+            <div class="text-xl">${{ stock.pricePaid }}</div>
+            <div class="text-xs">Original Price Paid</div>
           </div>
 
-          <div>
-            <span>Total value:</span>
-            <span>${{ numberFormat(totalValue) }}</span>
+          <div
+            v-if="stock.datePurchased"
+            class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4"
+          >
+            <div class="text-xl">{{ stock.datePurchased }}</div>
+            <div class="text-sm">Date Puchased</div>
           </div>
-          <div>
-            <span>Price change:</span>
-            <span>{{ numberFormat(stock.price - stock.pricePaid) }}</span>
+
+          <div class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4">
+            <div class="text-xl">${{ numberFormat(totalValue) }}</div>
+            <div class="text-sm">Total value</div>
           </div>
-          <div>
-            <span>Percentage change:</span>
-            <span>
-              {{
-                Number(
-                  ((stock.price - stock.pricePaid) / stock.pricePaid) * 100
-                ).toFixed(2)
-              }}%
-            </span>
+          <div class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4">
+            <div
+              class="font-bold text-xl"
+              :class="percentageChange < 0 ? 'text-red-600' : 'text-green-600'"
+            >
+              ${{ numberFormat(stock.price - stock.pricePaid) }}
+            </div>
+            <div class="text-sm">Price change</div>
+          </div>
+          <div class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4">
+            <div
+              class="font-bold text-xl"
+              :class="percentageChange < 0 ? 'text-red-600' : 'text-green-600'"
+            >
+              {{ percentageChange }}%
+            </div>
+            <div class="text-sm">Percentage change</div>
           </div>
         </div>
       </div>
@@ -105,7 +112,7 @@ export default {
   },
   data() {
     return {
-      showDetails: true
+      showDetails: false
     }
   },
   computed: {
@@ -115,6 +122,11 @@ export default {
     percentOfPortfolio() {
       return Number(
         this.totalValue / parseFloat(this.totalPortfolioValue) / 10
+      ).toFixed(2)
+    },
+    percentageChange() {
+      return Number(
+        ((this.stock.price - this.stock.pricePaid) / this.stock.pricePaid) * 100
       ).toFixed(2)
     }
   },
@@ -131,7 +143,7 @@ export default {
 .fadeHeight-enter-active,
 .fadeHeight-leave-active {
   transition: all 0.2s;
-  max-height: 230px;
+  max-height: 250px;
 }
 .fadeHeight-enter,
 .fadeHeight-leave-to {
