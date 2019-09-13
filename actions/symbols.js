@@ -16,14 +16,11 @@ export function setClient(newclient) {
 
 export const saveStocks = async ({ stocks, userId }) => {
   // Update database with new array of symbols
-  console.log(stocks)
-  const results = await client.post(
-    'http://localhost:3333/api/user/updateStocks',
-    {
-      symbol: stocks,
-      userId
-    }
-  )
+
+  const results = await client.post(`${process.env.API_URL}user/updateStocks`, {
+    symbol: stocks,
+    userId
+  })
 
   return results.data
 }

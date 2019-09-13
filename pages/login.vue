@@ -55,7 +55,7 @@ export default {
       //     }
       //   })
       this.$axios
-        .post('http://localhost:3333/api/auth/login', {
+        .post(`${process.env.API_URL}auth/login`, {
           email: this.email,
           password: this.password
         })

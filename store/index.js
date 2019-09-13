@@ -90,7 +90,7 @@ export const actions = {
       // if not, pull from database
       if (!state.me.firstname) {
         this.$axios
-          .post('http://localhost:3333/api/user/getUser', { userId })
+          .post(`${process.env.API_URL}user/getUser`, { userId })
           .then((response) => {
             commit('setUser', response.data)
             resolve(response.data)

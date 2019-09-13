@@ -66,7 +66,7 @@ export default {
   methods: {
     signUpSubmit() {
       this.$axios
-        .post('http://localhost:3333/api/auth/register', {
+        .post(`${process.env.API_URL}auth/register`, {
           firstName: this.firstName,
           lastName: this.lastName,
           email: this.email,

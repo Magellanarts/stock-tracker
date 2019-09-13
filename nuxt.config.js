@@ -24,6 +24,9 @@ export default {
    ** Global CSS
    */
   css: [],
+  env: {
+    API_URL: 'http://localhost:3333/api/'
+  },
   /*
    ** Plugins to load before mounting the App
    */
@@ -65,7 +68,7 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: 'http://localhost:3333/api/user/login',
+            url: `${process.env.API_URL}user/login`,
             method: 'post',
             propertyName: 'token'
           }
