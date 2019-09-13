@@ -1,3 +1,4 @@
+require('dotenv').config()
 export default {
   mode: 'universal',
   /*
@@ -25,7 +26,7 @@ export default {
    */
   css: [],
   env: {
-    API_URL: 'http://localhost:3333/api/'
+    API_URL: process.env.API_URL
   },
   /*
    ** Plugins to load before mounting the App

@@ -1,13 +1,13 @@
 <template>
   <div class="container mx-auto">
-    <h1 class="text-center my-8 text-5xl text-pink-900">Sign Up</h1>
+    <h1 class="text-center my-8 text-5xl text-blue-900">Sign Up</h1>
 
     <form class="text-center" @submit.prevent="signUpSubmit">
       <fieldset class="my-4">
         <input
           v-model="firstName"
           name="firstName"
-          class="w-3/5 border-pink-900 border-solid border rounded-sm p-1 hover:border-pink-700 focus:border-pink-700 outline-none h-8"
+          class="w-3/5 border-blue-900 border-solid border rounded-sm p-1 hover:border-blue-700 focus:border-blue-700 outline-none h-8"
           type="text"
           placeholder="First Name"
         />
@@ -16,7 +16,7 @@
         <input
           v-model="lastName"
           name="lastName"
-          class="w-3/5 border-pink-900 border-solid border rounded-sm p-1 hover:border-pink-700 focus:border-pink-700 outline-none h-8"
+          class="w-3/5 border-blue-900 border-solid border rounded-sm p-1 hover:border-blue-700 focus:border-blue-700 outline-none h-8"
           type="text"
           placeholder="Last Name"
         />
@@ -25,7 +25,7 @@
         <input
           v-model="email"
           name="email"
-          class="w-3/5 border-pink-900 border-solid border rounded-sm p-1 hover:border-pink-700 focus:border-pink-700 outline-none h-8"
+          class="w-3/5 border-blue-900 border-solid border rounded-sm p-1 hover:border-blue-700 focus:border-blue-700 outline-none h-8"
           type="email"
           placeholder="Email"
         />
@@ -34,7 +34,7 @@
         <input
           v-model="password"
           name="password"
-          class="w-3/5 border-pink-900 border-solid border rounded-sm p-1 hover:border-pink-700 focus:border-pink-700 outline-none h-8"
+          class="w-3/5 border-blue-900 border-solid border rounded-sm p-1 hover:border-blue-700 focus:border-blue-700 outline-none h-8"
           type="password"
           placeholder="Password"
         />
@@ -42,7 +42,7 @@
       <fieldset>
         <button
           type="submit"
-          class="rounded-sm px-6 py-2 text-lg bg-pink-900 text-white hover:bg-pink-700 font-bold"
+          class="rounded-sm px-6 py-2 text-lg bg-blue-900 text-white hover:bg-blue-700 font-bold"
         >
           Submit
         </button>
