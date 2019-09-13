@@ -7,3 +7,23 @@ export const getQuotes = async (symbols) => {
 
   return results.data['Stock Quotes']
 }
+
+let client
+
+export function setClient(newclient) {
+  client = newclient
+}
+
+export const saveStocks = async ({ stocks, userId }) => {
+  // Update database with new array of symbols
+  console.log(stocks)
+  const results = await client.post(
+    'http://localhost:3333/api/user/updateStocks',
+    {
+      symbol: stocks,
+      userId
+    }
+  )
+
+  return results.data
+}

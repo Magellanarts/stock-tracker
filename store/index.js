@@ -1,5 +1,5 @@
 import Vue from 'Vue'
-import { reject } from 'q'
+import { saveStocks, getQuotes } from '@/actions/symbols'
 const Cookie = process.client ? require('js-cookie') : undefined
 const cookieparser = process.server ? require('cookieparser') : undefined
 
@@ -34,6 +34,7 @@ export const mutations = {
         Vue.set(state.me, 'stocks', [{ symbol, price }])
       }
     } else {
+      // remove symbol from stocks list
       const i = state.me.stocks.map((item) => item.symbol).indexOf(symbol) // find index of your object
 
       state.me.stocks.splice(i, 1) // remove it from array
@@ -46,6 +47,17 @@ export const mutations = {
       ),
       position
     ]
+  },
+  updatePrices(state, prices) {
+    prices.forEach((stock) => {
+      const i = state.me.stocks
+        .map((item) => item.symbol)
+        .indexOf(stock['1. symbol']) // find index of your object
+
+      state.me.stocks[i].price = stock['2. price']
+    })
+
+    saveStocks({ stocks: state.me.stocks, userId: state.userId })
   }
 }
 
@@ -73,7 +85,7 @@ export const actions = {
   getUser({ commit, state }) {
     const userId = state.userId
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       // check to see if we already have values for user in state
       // if not, pull from database
       if (!state.me.firstname) {
@@ -95,19 +107,29 @@ export const actions = {
     // Update state with new symbol
 
     commit('setSymbols', payload)
-
     // Update database with new array of symbols
-    this.$axios.post('http://localhost:3333/api/user/updateStocks', {
-      symbol: state.me.stocks,
-      userId: state.userId
-    })
+    saveStocks(state.me.stocks, state.userId)
   },
   editPosition({ commit, state }, position) {
     commit('updatePosition', position)
     // Update database with new array of symbols
-    this.$axios.post('http://localhost:3333/api/user/updateStocks', {
-      symbol: state.me.stocks,
-      userId: state.userId
+    saveStocks(state.me.stocks, state.userId)
+  },
+  async refreshPrices({ commit, state }) {
+    // create blank symbols array
+    let symbols = []
+    // loop through all stocks getting their symbols and storing in array
+    state.me.stocks.forEach((stock) => {
+      symbols.push(stock.symbol)
     })
+
+    // convert array to string to pass to stocks api
+    symbols = symbols.toString()
+
+    // get prices back
+    const prices = await getQuotes(symbols)
+
+    // send new prices to mutation to update state
+    commit('updatePrices', prices)
   }
 }

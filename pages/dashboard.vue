@@ -10,49 +10,28 @@
       <div class="md:flex md:mr-8">
         <div class="md:w-7/12 mb-12">
           <h3 class="text-2xl mb-4 text-blue-600">Your Stocks</h3>
+          <h4 class="text-xl mb-4 text-blue-500">
+            Total Value:
+            <span class="text-green-500">${{ totalValue }}</span>
+          </h4>
+          <div class="border-t border-b py-2 text-right mb-6">
+            <button
+              type="button"
+              class="rounded-sm p-1 px-2 text-sm bg-orange-400 text-white font-bold hover:bg-orange-300"
+              @click="refreshPrices"
+            >
+              Refresh
+            </button>
+          </div>
           <div v-if="me.stocks">
-            <div
+            <stock
               v-for="stock in sortedStocks"
               :key="stock.symbol"
               class="shadow-md p-4 justify-between mb-6"
-            >
-              <div
-                class="border-b border-blue-600 pb-2 justify-between flex items-center"
-              >
-                <div class="text-lg text-blue-800">
-                  {{ stock.symbol }} -
-                  <span class="text-sm text-blue-700">${{ stock.price }}</span>
-                </div>
-
-                <div class="flex justify-around items-center">
-                  <button
-                    type="button"
-                    class="rounded-sm p-1 px-2 text-sm bg-red-400 text-white font-bold hover:bg-red-300"
-                    @click="
-                      updateSymbols({
-                        symbol: stock.symbol,
-                        action: 'remove'
-                      })
-                    "
-                  >
-                    Remove
-                  </button>
-                  <button
-                    type="button"
-                    class="rounded-sm p-1 px-2 text-sm bg-blue-400 text-white font-bold hover:bg-blue-300 ml-2"
-                  >
-                    Details
-                  </button>
-                  <button
-                    type="button"
-                    class="rounded-sm p-1 px-2 text-sm bg-gray-400 text-white font-bold hover:bg-gray-300 ml-2"
-                    @click="updateCurrentPosition(stock)"
-                  >
-                    Edit
-                  </button>
-                </div>
-              </div>
-            </div>
+              :stock="stock"
+              :total-portfolio-value="totalValue"
+              @update-current-position="onUpdateCurrentPosition"
+            />
           </div>
         </div>
 
@@ -71,14 +50,18 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { numbers } from '@/mixins/formatting'
 import SymbolForm from '@/components/SymbolForm'
 import EditPosition from '@/components/EditPosition'
+import Stock from '@/components/Stock'
 
 export default {
   components: {
     SymbolForm,
-    EditPosition
+    EditPosition,
+    Stock
   },
+  mixins: [numbers],
   data() {
     return {
       editActive: false,
@@ -103,14 +86,23 @@ export default {
       }
 
       return localStocks
+    },
+    totalValue() {
+      let value = 0
+
+      this.me.stocks.forEach((stock) => {
+        if (stock.shares && stock.price) value += stock.price * stock.shares
+      })
+
+      return this.numberFormat(value)
     }
   },
   async mounted() {
     await this.getUser()
   },
   methods: {
-    ...mapActions(['getUser', 'updateSymbols']),
-    updateCurrentPosition(position) {
+    ...mapActions(['getUser', 'refreshPrices']),
+    onUpdateCurrentPosition(position) {
       this.editActive = true
       this.currentPosition = position
     }
