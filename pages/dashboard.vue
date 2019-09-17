@@ -14,47 +14,13 @@
             Total Value:
             <span class="text-green-500">${{ totalValue }}</span>
           </h4>
-          <div class="border-t border-b py-2 text-right mb-6">
-            <div class="inline-block relative w-32 align-middle text-sm h-8">
-              <select
-                v-model="filterBy"
-                class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-2 py-1 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline h-8"
-                @change="changeFilter"
-              >
-                <option disabled>Filter by:</option>
-                <option value="symbol">Alphabetical</option>
-                <option value="price">Price</option>
-                <option>% of Portfolio</option>
-              </select>
-              <div
-                class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
-              >
-                <svg
-                  class="fill-current h-4 w-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-                  />
-                </svg>
-              </div>
-            </div>
-            <button
-              type="button"
-              class="inline-block align-middle rounded-sm h-30 p-1 px-2 text-sm bg-yellow-400 text-white font-bold hover:bg-yellow-300 h-8"
-              @click="reverse = !reverse"
-            >
-              Reverse
-            </button>
-            <button
-              type="button"
-              class="inline-block align-middle rounded-sm h-30 p-1 px-2 text-sm bg-orange-400 text-white font-bold hover:bg-orange-300 h-8"
-              @click="refreshPrices"
-            >
-              Refresh
-            </button>
-          </div>
+
+          <dashboard-controls
+            :reverse.sync="reverse"
+            :filter-by.sync="filterBy"
+            :all-details.sync="allDetails"
+          />
+
           <div v-if="me.stocks">
             <stock
               v-for="stock in stockSorting"
@@ -62,6 +28,7 @@
               class="shadow-md p-4 justify-between mb-6"
               :stock="stock"
               :total-portfolio-value="parseFloat(totalValue)"
+              :details="allDetails"
               @update-current-position="onUpdateCurrentPosition"
             />
           </div>
@@ -85,13 +52,15 @@ import { mapState, mapActions } from 'vuex'
 import { numbers } from '@/mixins/formatting'
 import SymbolForm from '@/components/SymbolForm'
 import EditPosition from '@/components/EditPosition'
+import DashboardControls from '@/components/DashboardControls'
 import Stock from '@/components/Stock'
 
 export default {
   components: {
     SymbolForm,
     EditPosition,
-    Stock
+    Stock,
+    DashboardControls
   },
   mixins: [numbers],
   data() {
@@ -99,7 +68,8 @@ export default {
       editActive: false,
       currentPosition: {},
       filterBy: 'symbol',
-      reverse: false
+      reverse: false,
+      allDetails: false
     }
   },
   middleware: 'authenticated',
@@ -107,24 +77,11 @@ export default {
     ...mapState({
       me: (state) => state.me
     }),
-    sortedStocks() {
-      let localStocks = []
-      if (this.me.stocks) {
-        localStocks = [...this.me.stocks]
-
-        localStocks.sort(function(a, b) {
-          const textA = a.symbol.toUpperCase()
-          const textB = b.symbol.toUpperCase()
-          return textA < textB ? -1 : textA > textB ? 1 : 0
-        })
-      }
-
-      return localStocks
-    },
     stockSorting() {
       let localStocks = []
       const filtering = this.filterBy
       const localReverse = this.reverse
+      const portfolioTotal = this.totalValue
       if (this.me.stocks) {
         localStocks = [...this.me.stocks]
 
@@ -134,6 +91,9 @@ export default {
           if (filtering === 'price') {
             textA = Number(a[filtering])
             textB = Number(b[filtering])
+          } else if (filtering === 'percentage') {
+            textA = Number((a.shares * a.price) / parseFloat(portfolioTotal))
+            textB = Number((b.shares * b.price) / parseFloat(portfolioTotal))
           } else {
             textA = a[filtering]
             textB = b[filtering]
@@ -164,13 +124,10 @@ export default {
     await this.getUser()
   },
   methods: {
-    ...mapActions(['getUser', 'refreshPrices']),
+    ...mapActions(['getUser']),
     onUpdateCurrentPosition(position) {
       this.editActive = true
       this.currentPosition = position
-    },
-    changeFilter(e) {
-      console.log(e)
     }
   }
 }

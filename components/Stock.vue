@@ -40,7 +40,7 @@
       </div>
     </div>
     <transition name="fadeHeight" mode="out-in">
-      <div v-if="showDetails" class="py-4 leading-tight">
+      <div v-if="toggleDetails" class="py-4 leading-tight">
         <div class="flex flex-wrap">
           <div class="text-center w-1/2 sm:w-1/3 lg:w-1/4 mb-4">
             <div class="text-xl font-bold">{{ stock.shares }}</div>
@@ -110,11 +110,15 @@ export default {
     totalPortfolioValue: {
       type: Number,
       required: true
+    },
+    details: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
     return {
-      showDetails: true
+      showDetails: false
     }
   },
   computed: {
@@ -130,6 +134,13 @@ export default {
       return Number(
         ((this.stock.price - this.stock.pricePaid) / this.stock.pricePaid) * 100
       ).toFixed(2)
+    },
+    toggleDetails() {
+      if (this.details === true) {
+        return true
+      } else {
+        return this.showDetails
+      }
     }
   },
   methods: {
