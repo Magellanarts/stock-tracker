@@ -14,13 +14,28 @@ export function setClient(newclient) {
   client = newclient
 }
 
-export const saveStocks = async ({ stocks, userId }) => {
+export const saveStocks = async ({ stocks, userId, timestamp }) => {
   // Update database with new array of symbols
 
   const results = await client.post(`${process.env.API_URL}user/updateStocks`, {
     symbol: stocks,
+    timestamp,
     userId
   })
+
+  return results.data
+}
+
+export const saveSnapshots = async ({ snapshots, userId }) => {
+  // Update database with new array of snapshots
+
+  const results = await client.post(
+    `${process.env.API_URL}user/updateSnapshots`,
+    {
+      snapshots,
+      userId
+    }
+  )
 
   return results.data
 }

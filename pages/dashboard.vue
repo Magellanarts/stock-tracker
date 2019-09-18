@@ -3,7 +3,7 @@
     <div class="container mx-auto px-6">
       <h1 class="text-center my-8 text-5xl text-blue-900">Dashboard</h1>
 
-      <h2 class="text-4xl my-4 text-blue-700">
+      <h2 class="text-4xl my-4 text-blue-700 leading-tight">
         Welcome {{ me.firstname }} {{ me.lastname }}
       </h2>
 
@@ -13,6 +13,9 @@
           <h4 class="text-xl mb-4 text-blue-500">
             Total Value:
             <span class="text-green-500">${{ totalValue }}</span>
+            <div v-if="me.lastupdate" class="text-xs">
+              (last updated: {{ updateTime(me.lastupdate) }})
+            </div>
           </h4>
 
           <dashboard-controls
@@ -36,6 +39,14 @@
 
         <div class="md:w-5/12 md:ml-8">
           <symbol-form />
+          <div v-if="me.snapshots">
+            <h3 class="text-2xl mb-4 text-blue-600">Snapshots</h3>
+            <snapshot
+              v-for="(snapshot, index) in me.snapshots"
+              :key="index"
+              :snapshot="snapshot"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -49,20 +60,22 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import { numbers } from '@/mixins/formatting'
+import { numbers, dates } from '@/mixins/formatting'
 import SymbolForm from '@/components/SymbolForm'
 import EditPosition from '@/components/EditPosition'
 import DashboardControls from '@/components/DashboardControls'
 import Stock from '@/components/Stock'
+import Snapshot from '@/components/Snapshot'
 
 export default {
   components: {
     SymbolForm,
     EditPosition,
     Stock,
-    DashboardControls
+    DashboardControls,
+    Snapshot
   },
-  mixins: [numbers],
+  mixins: [numbers, dates],
   data() {
     return {
       editActive: false,

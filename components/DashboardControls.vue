@@ -2,6 +2,13 @@
   <div class="border-t border-b py-2 text-right mb-6">
     <button
       type="button"
+      class="inline-block align-middle rounded-sm h-30 p-1 px-2 text-sm bg-teal-400 text-white font-bold hover:bg-teal-300 h-8"
+      @click="createSnapshot"
+    >
+      Add Snapshot
+    </button>
+    <button
+      type="button"
       class="inline-block align-middle rounded-sm h-30 p-1 px-2 text-sm bg-blue-400 text-white font-bold hover:bg-blue-300 h-8"
       @click="$emit('update:allDetails', !allDetails)"
     >
@@ -72,7 +79,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['refreshPrices']),
+    ...mapActions(['refreshPrices', 'createSnapshot']),
     handleFilterChange() {
       this.$emit('update:filterBy', this.localFilter)
     }

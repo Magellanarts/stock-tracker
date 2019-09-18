@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 export const numbers = {
   methods: {
     numberFormat(number, decimalPos, decimalSep, thousandSep) {
@@ -20,6 +22,15 @@ export const numbers = {
             .split('.')[1]
 
       return f
+    }
+  }
+}
+
+export const dates = {
+  methods: {
+    updateTime(time) {
+      const day = moment(time)
+      return day.format('MMMM Do YYYY, h:mm:ss a')
     }
   }
 }

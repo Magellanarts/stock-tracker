@@ -40,20 +40,12 @@ export default {
   data() {
     return {
       email: '',
-      password: '',
-      results: ''
+      password: ''
     }
   },
   middleware: 'notAuthenticated',
   methods: {
     loginSubmit() {
-      // this.$auth
-      //   .loginWith('local', {
-      //     data: {
-      //       email: this.email,
-      //       password: this.password
-      //     }
-      //   })
       this.$axios
         .post(`${process.env.API_URL}auth/login`, {
           email: this.email,
@@ -61,8 +53,9 @@ export default {
         })
         .then((response) => {
           if (response.data.token) {
-            this.results = response.data
             this.$store.dispatch('userLogin', response.data)
+            // logged in. redirect to dashboard
+            this.$router.push('/dashboard')
           }
         })
         .catch((e) => {

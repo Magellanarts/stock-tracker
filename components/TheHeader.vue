@@ -11,18 +11,28 @@
       <nuxt-link v-if="token" class="text-blue-700" to="/dashboard"
         >Dashboard</nuxt-link
       >
+      <nuxt-link
+        v-if="token"
+        class="text-blue-700"
+        to="/"
+        @click.native="userLogout"
+        >Log Out</nuxt-link
+      >
     </nav>
   </header>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   computed: {
     ...mapState({
       token: (state) => state.authToken
     })
+  },
+  methods: {
+    ...mapActions(['userLogout'])
   }
 }
 </script>
