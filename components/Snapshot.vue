@@ -1,5 +1,5 @@
 <template>
-  <div class="shadow p-3">
+  <div class="shadow p-3 mb-2">
     <div class="flex justify-between sm:flex sm:items-center">
       <div class="text-gray-800 text-xs leading-tight">
         <span>{{ updateTime(snapshot.timestamp) }}</span>

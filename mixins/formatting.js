@@ -28,9 +28,13 @@ export const numbers = {
 
 export const dates = {
   methods: {
-    updateTime(time) {
+    updateTime(time, format) {
       const day = moment(time)
-      return day.format('MMMM Do YYYY, h:mm:ss a')
+      if (format) {
+        return day.format(format)
+      } else {
+        return day.format('MMMM Do YYYY, h:mm:ss a')
+      }
     }
   }
 }

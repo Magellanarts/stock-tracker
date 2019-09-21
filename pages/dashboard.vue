@@ -7,6 +7,12 @@
         Welcome {{ me.firstname }} {{ me.lastname }}
       </h2>
 
+      <stock-graph
+        v-if="me.snapshots"
+        :snapshots="me.snapshots"
+        :height="100"
+      />
+
       <div class="md:flex md:mr-8">
         <div class="md:w-7/12 mb-12">
           <h3 class="text-2xl mb-4 text-blue-600">Your Stocks</h3>
@@ -66,6 +72,7 @@ import EditPosition from '@/components/EditPosition'
 import DashboardControls from '@/components/DashboardControls'
 import Stock from '@/components/Stock'
 import Snapshot from '@/components/Snapshot'
+import StockGraph from '@/components/StockGraph'
 
 export default {
   components: {
@@ -73,7 +80,8 @@ export default {
     EditPosition,
     Stock,
     DashboardControls,
-    Snapshot
+    Snapshot,
+    StockGraph
   },
   mixins: [numbers, dates],
   data() {

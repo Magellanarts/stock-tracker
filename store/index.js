@@ -3,7 +3,7 @@ import mutations from './mutations'
 
 const state = () => ({
   authToken: '',
-  me: { stocks: [], snapshots: [] },
+  me: { stocks: [] },
   userId: ''
 })
 
