@@ -31,21 +31,30 @@
         </button>
       </fieldset>
     </form>
-    {{ results }}
+    <loading :active.sync="isLoading" :is-full-page="true" />
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
 export default {
+  components: {
+    Loading
+  },
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      isLoading: false
     }
   },
   middleware: 'notAuthenticated',
   methods: {
+    ...mapActions(['userLogin']),
     loginSubmit() {
+      this.isLoading = true
       this.$axios
         .post(`${process.env.API_URL}auth/login`, {
           email: this.email,
@@ -53,14 +62,15 @@ export default {
         })
         .then((response) => {
           if (response.data.token) {
-            this.$store.dispatch('userLogin', response.data)
+            this.userLogin(response.data)
+
             // logged in. redirect to dashboard
             this.$router.push('/dashboard')
+            this.isLoading = false
           }
         })
         .catch((e) => {
           this.results = e.data
-          console.log(e.response.data[0].message)
         })
     }
   }

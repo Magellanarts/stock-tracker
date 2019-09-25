@@ -79,6 +79,8 @@ export default {
 
     // send new prices to mutation to update state
     commit('updatePrices', prices)
+
+    return prices
   },
   createSnapshot({ commit, state }) {
     let totalValue = 0

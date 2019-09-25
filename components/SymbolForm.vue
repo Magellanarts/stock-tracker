@@ -28,7 +28,7 @@
     <div
       v-for="result in searchResults"
       :key="result.symbol"
-      class="symbol shadow-md p-4 justify-between flex items-center"
+      class="symbol shadow-md p-4 justify-between flex items-center mb-2"
     >
       <div>
         <span class="text-2xl text-blue-800">{{ result['1. symbol'] }}</span>
@@ -58,6 +58,12 @@ import { mapActions } from 'vuex'
 import { getQuotes } from '@/actions/symbols'
 
 export default {
+  props: {
+    isLoading: {
+      type: Boolean,
+      required: true
+    }
+  },
   data() {
     return {
       searchField: '',
@@ -68,7 +74,9 @@ export default {
     ...mapActions(['updateSymbols']),
     async searchSymbols() {
       // cmg,aapl,mack,ua,sbux,amzn,fb,vti,cgc,bynd,dis
+      this.$emit('update:isLoading', true)
       this.searchResults = await getQuotes(this.searchField)
+      this.$emit('update:isLoading', false)
     }
   }
 }

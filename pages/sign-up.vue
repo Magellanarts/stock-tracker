@@ -48,23 +48,32 @@
         </button>
       </fieldset>
     </form>
-    {{ results }}
+    <loading :active.sync="isLoading" :is-full-page="true" />
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
+
 export default {
+  components: {
+    Loading
+  },
   data() {
     return {
       email: '',
       password: '',
       firstName: '',
       lastName: '',
-      results: ''
+      isLoading: false
     }
   },
   methods: {
+    ...mapActions(['userLogin']),
     signUpSubmit() {
+      this.isLoading = true
       this.$axios
         .post(`${process.env.API_URL}auth/register`, {
           firstName: this.firstName,
@@ -76,13 +85,27 @@ export default {
           this.results = response.data
           if (response.data === 'success') {
             // user was created,
-            // take them to their user page
-            this.$router.push('login')
+            // now make sure they are logged in
+            this.$axios
+              .post(`${process.env.API_URL}auth/login`, {
+                email: this.email,
+                password: this.password
+              })
+              .then((response) => {
+                if (response.data.token) {
+                  this.userLogin(response.data)
+
+                  // logged in. redirect to dashboard
+                  this.$router.push('/dashboard')
+                  this.isLoading = false
+                }
+              })
+              .catch((e) => {
+                this.results = e.data
+              })
           }
         })
     }
   }
 }
 </script>
-
-<style></style>

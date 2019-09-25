@@ -49,7 +49,7 @@
     <button
       type="button"
       class="inline-block align-middle rounded-sm h-30 p-1 px-2 text-sm bg-orange-400 text-white font-bold hover:bg-orange-300 h-8"
-      @click="refreshPrices"
+      @click="handleRefreshPrices"
     >
       Refresh
     </button>
@@ -71,7 +71,8 @@ export default {
     allDetails: {
       type: Boolean,
       required: true
-    }
+    },
+    isLoading: { type: Boolean, required: true }
   },
   data() {
     return {
@@ -82,6 +83,11 @@ export default {
     ...mapActions(['refreshPrices', 'createSnapshot']),
     handleFilterChange() {
       this.$emit('update:filterBy', this.localFilter)
+    },
+    async handleRefreshPrices() {
+      this.$emit('update:isLoading', true)
+      await this.refreshPrices()
+      this.$emit('update:isLoading', false)
     }
   }
 }

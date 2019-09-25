@@ -28,6 +28,7 @@
             :reverse.sync="reverse"
             :filter-by.sync="filterBy"
             :all-details.sync="allDetails"
+            :is-loading.sync="isLoading"
           />
 
           <div v-if="me.stocks">
@@ -44,7 +45,7 @@
         </div>
 
         <div class="md:w-5/12 md:ml-8">
-          <symbol-form />
+          <symbol-form :is-loading.sync="isLoading" />
           <div v-if="me.snapshots">
             <h3 class="text-2xl mb-4 text-blue-600">Snapshots</h3>
             <snapshot
@@ -61,10 +62,13 @@
       :position="currentPosition"
       :edit-active.sync="editActive"
     />
+    <loading :active.sync="isLoading" :is-full-page="true" />
   </div>
 </template>
 
 <script>
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
 import { mapState, mapActions } from 'vuex'
 import { numbers, dates } from '@/mixins/formatting'
 import SymbolForm from '@/components/SymbolForm'
@@ -81,7 +85,8 @@ export default {
     Stock,
     DashboardControls,
     Snapshot,
-    StockGraph
+    StockGraph,
+    Loading
   },
   mixins: [numbers, dates],
   data() {
@@ -90,7 +95,8 @@ export default {
       currentPosition: {},
       filterBy: 'symbol',
       reverse: false,
-      allDetails: false
+      allDetails: false,
+      isLoading: false
     }
   },
   middleware: 'authenticated',
@@ -132,13 +138,16 @@ export default {
     },
 
     totalValue() {
-      let value = 0
+      if (this.me.stocks) {
+        let value = 0
 
-      this.me.stocks.forEach((stock) => {
-        if (stock.shares && stock.price) value += stock.price * stock.shares
-      })
+        this.me.stocks.forEach((stock) => {
+          if (stock.shares && stock.price) value += stock.price * stock.shares
+        })
 
-      return this.numberFormat(value)
+        return this.numberFormat(value)
+      }
+      return this.numberFormat(0)
     }
   },
   async mounted() {
